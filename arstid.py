@@ -1,4 +1,4 @@
-from asterid import ad
+import asterid as ad
 import itertools
 
 def taxon_pairs(ts):
@@ -8,20 +8,20 @@ def taxon_pairs(ts):
 
 def has_missing(ts, dm):
     for i, j in taxon_pairs(ts):
-        v = dm.get_mask((i, j))
+        v = dm.getmask((i, j))
         if v == 0:
             return True
     return False
 
 def run_iterations(ts, D, methods):
     fns = {
-        "u": lambda ts, D: astrid.upgma_star(ts, D) + ";",
-        "f": lambda ts, D: astrid.fastme_balme(ts, D, 0, 0),
-        "n": lambda ts, D: astrid.fastme_balme(ts, D, 1, 0),
-        "s": lambda ts, D: astrid.fastme_balme(ts, D, 1, 1),
-        "j": lambda ts, D: astrid.fastme_nj(ts, D, 0, 0),
-        "N": lambda ts, D: astrid.fastme_nj(ts, D, 1, 0),
-        "S": lambda ts, D: astrid.fastme_nj(ts, D, 1, 1),
+        "u": lambda ts, D: ad.upgma_star(ts, D) + ";",
+        "f": lambda ts, D: ad.fastme_balme(ts, D, 0, 0),
+        "n": lambda ts, D: ad.fastme_balme(ts, D, 1, 0),
+        "s": lambda ts, D: ad.fastme_balme(ts, D, 1, 1),
+        "j": lambda ts, D: ad.fastme_nj(ts, D, 0, 0),
+        "N": lambda ts, D: ad.fastme_nj(ts, D, 1, 0),
+        "S": lambda ts, D: ad.fastme_nj(ts, D, 1, 1),
     }
     t = None
     for m in methods:
@@ -34,7 +34,7 @@ def run_iterations(ts, D, methods):
 
 def astrid(gtrees, methods = "uns", explicit = True):
     ts = ad.get_ts(gtrees)
-    D = ad.mk_distance_matrix(gtrees)
+    D = ad.mk_distance_matrix(ts, gtrees)
     if not explicit and len(methods) > 1:
         if not has_missing(ts, D):
             methods = methods[-1]
